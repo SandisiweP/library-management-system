@@ -4,13 +4,9 @@ A NestJS + Prisma + PostgreSQL backend for a library's book catalogue.
 
 ## Schema Decisions
 
-**Why Book references Genre instead of embedding it:**
-A genre is shared by many books. If every Book stored its own copy of the
-genre's details, renaming "Fiction" to "Literary Fiction" would mean editing
-every fiction book, and a typo would quietly create a duplicate genre.
-Instead, Book stores only a `genreId` foreign key pointing to one Genre row.
-The genre lives in a single place, and PostgreSQL enforces the link, so a
-book can never point to a genre that does not exist.
+I made Book point to Genre with a `genreId` instead of putting the genre details inside every book. Lots of books share the same genre, so if I copied the genre into each one, I would be storing the same thing over and over. If I wanted to rename "Fiction" later, I would have to change it in every single fiction book, and one typo would create a duplicate genre by accident.
+
+With a foreign key, the genre is saved once in its own table and each book just points to it. Change it in one place and every book is updated. PostgreSQL also checks the link, so a book can't point to a genre that doesn't exist. It works like a school register: it doesn't copy the whole Grade 5 class into every learner's file, it just writes the class number.
 
 ## Setup
 
